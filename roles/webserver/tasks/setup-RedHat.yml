@@ -19,6 +19,7 @@
   git:
     repo: https://github.com/ysf00/Tooling-Website.git
     dest: /var/www/html/tooling
+    force: yes
 
 - name: change permission
   file:

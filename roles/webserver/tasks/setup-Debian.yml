@@ -3,40 +3,61 @@
   file:
     path: /var/www
     state: directory
-    owner: apache
-    group: apache
+    owner: root
+    group: root
     mode: '0755'
-    recurse: yes
 
 - name: Install Debian Packages
-  yum:
+  apt:
     name:
       - php
-      - php-mysql
       - apache2
       - git
-      - libapache2-mod-php5
+      - libapache2-mod-php
+      - php-mysqli
     state: present
 
 - name: Copy the code from github
   git:
-    repo: git@github.com:ysf00/Tooling-Website.git
-    dest: /var/www
-    become: no
+    repo: https://github.com/ysf00/Tooling-Website.git
+    dest: /var/www/html/tooling
+    force: yes
+
+- name: remove index file
+  file:
+    path: /var/www/html/index.html
+    state: absent
+
+- name: change permission
+  file:
+    path: /var/www/html/tooling
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0755
+    recurse: yes
+
+- name: change permission apache2
+  file:
+    path: /var/log/apache2
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0755
+    recurse: yes
 
 - name: copy conf file
   template:
-    src: default_apache.conf.j2
+    src: default_apache.conf
     dest: /etc/apache2/sites-available
-  notify: Restart Httpd
+  notify: Restart Apache
 
 - name: Enable New site
-  shell: /usr/sbin/a2ensite default_apache.conf.j2
+  command: /usr/sbin/a2ensite default_apache.conf
   notify: Reload Apache
 
 - name: Disable default page
-  shell: /usr/sbin/a2dissite 000-default.conf
-  when: ap-disable-dafault
+  command: /usr/sbin/a2dissite 000-default.conf
   notify: Reload Apache
 
 - name: Enable Apache

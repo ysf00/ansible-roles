@@ -3,7 +3,7 @@
 
 [webservers]
 172.31.36.3 ansible_user=ec2-user
-172.31.36.4 ansible_user=ec2-user
+172.31.36.4 ansible_user=ubuntu
 172.31.36.5 ansible_user=ec2-user
 
 [db]
