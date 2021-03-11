@@ -1,0 +1,20 @@
+[nfs]
+172.31.36.2 ansible_user=ubuntu
+
+[webservers]
+172.31.36.3 ansible_user=ec2-user
+172.31.36.4 ansible_user=ec2-user
+172.31.36.5 ansible_user=ec2-user
+
+[db]
+172.31.36.6 ansible_user=ec2-user
+    
+[jenkins]
+172.31.36.7 ansible_user=ec2-user
+
+[lb]
+172.31.36.8 ansible_user=ubuntu
+
+[all]
+172.31.36.2 ansible_user=ubuntu
+172.31.36.3 ansible_user=ec2-user

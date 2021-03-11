@@ -1,0 +1,46 @@
+---
+- name: Create Document root
+  file:
+    path: /var/www
+    state: directory
+    owner: apache
+    group: apache
+    mode: '0755'
+    recurse: yes
+
+- name: Install Debian Packages
+  yum:
+    name:
+      - php
+      - php-mysql
+      - apache2
+      - git
+      - libapache2-mod-php5
+    state: present
+
+- name: Copy the code from github
+  git:
+    repo: git@github.com:ysf00/Tooling-Website.git
+    dest: /var/www
+    become: no
+
+- name: copy conf file
+  template:
+    src: default_apache.conf.j2
+    dest: /etc/apache2/sites-available
+  notify: Restart Httpd
+
+- name: Enable New site
+  shell: /usr/sbin/a2ensite default_apache.conf.j2
+  notify: Reload Apache
+
+- name: Disable default page
+  shell: /usr/sbin/a2dissite 000-default.conf
+  when: ap-disable-dafault
+  notify: Reload Apache
+
+- name: Enable Apache
+  service:
+    name: apache2
+    state: started
+    enabled: yes
