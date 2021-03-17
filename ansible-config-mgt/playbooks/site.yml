@@ -1,0 +1,9 @@
+---
+- hosts: all
+- import_playbook: ../static-assignments/common.yml
+
+- hosts: webservers
+- import_playbook: ../static-assignments/webservers.yml
+
+- hosts: nfs
+- import_playbook: ../static-assignments/nfs.yml
